@@ -56,28 +56,6 @@ class MainActivity : BaseActivity(), TransmitFragment.OnFragmentInteractionListe
         view_pager.adapter = pagerAdapter
         view_pager.addOnPageChangeListener(this)
         view_pager.setPagingEnabled(false)
-
-        // Monitor network connection
-        connectionLiveData = ConnectionLiveData(this)
-        connectionLiveData?.observe(this, Observer { connected ->
-            if(connected!! && waitingForConnection) {
-                waitingForConnection = false;
-                if(wifiStatus == WiFiStatus.CONNECTED) {
-                    wifiConnected()
-                } else if (wifiStatus == WiFiStatus.DISCONNECTED) {
-                    wifiDisconnected()
-                }
-            } else if (!connected) {
-                if(wifiStatus == WiFiStatus.CONNECTED) {
-                    Toast.makeText(this@MainActivity, getString(R.string.error_network_disconnected), Toast.LENGTH_SHORT).show()
-                    wifiDisconnected()
-                }
-            }
-        })
-
-        // Monitor WiFi connection
-        wiFiReceiverManager = WiFiReceiverManager(application, lifecycle)
-        wiFiReceiverManager!!.wifiResponse().observe(this, Observer {response -> processWifiResponse(response)})
     }
 
     @LayoutRes
@@ -189,8 +167,8 @@ class MainActivity : BaseActivity(), TransmitFragment.OnFragmentInteractionListe
     private inner class MainSlidePagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
         override fun getItem(position: Int): Fragment {
             when (position) {
-                0 -> return MainFragment.newInstance()
-                1 -> return TransmitFragment.newInstance()
+                //0 -> return MainFragment.newInstance()
+                0 -> return TransmitFragment.newInstance()
                 else -> return MainFragment.newInstance()
             }
         }

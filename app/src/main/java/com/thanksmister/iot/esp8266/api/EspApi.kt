@@ -23,7 +23,6 @@ import io.reactivex.Observable
 import okhttp3.OkHttpClient
 
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -58,7 +57,11 @@ class EspApi(private val address: String) {
         service = retrofit.create(EspService::class.java)
     }
 
-    fun sendState(state:String): Observable<MessageResponse> {
-        return service.sendState(state)
+    fun getParameters(): Observable<ParameterResponse> {
+        return service.getParameters("param_json");
+    }
+
+    fun sendParameters(timezone: String, h24:String, blink:String, temp:String, adaptive:String, leds:String, leds_mode:String, brightness_offset:String, shutdown_th:String, sleep_hour: String, wake_hour:String, shutdown_delay:String): Observable<String>{//LiveData<ApiResponse<Message>> {
+        return service.sendConfiguration("paramsave", timezone, h24, blink, temp, adaptive, leds, leds_mode, brightness_offset, shutdown_th, sleep_hour, wake_hour, shutdown_delay)
     }
 }

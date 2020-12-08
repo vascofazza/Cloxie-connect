@@ -57,6 +57,22 @@ constructor(private val preferences: AppPreferences) {
         this.preferences.put(PREF_PASSWORD, value)
     }
 
+    fun fwVersion():String? {
+        return this.preferences.getString(FIRMWARE_VERSION, "0.0.0")
+    }
+
+    fun fwVersion(value:String) {
+        this.preferences.put(FIRMWARE_VERSION, value)
+    }
+
+    fun upTime():String? {
+        return this.preferences.getString(ACTIVITY_TIME, "0d 0h 0m 0s")
+    }
+
+    fun upTime(value:String) {
+        this.preferences.put(ACTIVITY_TIME, value)
+    }
+
     /**
      * Reset the `SharedPreferences` and database
      */
@@ -68,5 +84,7 @@ constructor(private val preferences: AppPreferences) {
         @JvmField val PREF_SSID = "pref_ssid"
         @JvmField val PREF_PASSWORD = "pref_password"
         @JvmField val PREF_INACTIVITY_TIME = "pref_inactivity_time"
+        @JvmField val FIRMWARE_VERSION = "firm_version"
+        @JvmField val ACTIVITY_TIME = "uptime"
     }
 }

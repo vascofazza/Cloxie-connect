@@ -50,6 +50,16 @@ class SettingsActivity : BaseActivity() {
         } else {
             api_text.text = preferences.address()
         }
+        if(TextUtils.isEmpty(preferences.fwVersion())) {
+            api_fw_ver.text = getString(R.string.pref_fw_ver)
+        } else {
+            api_fw_ver.text = preferences.fwVersion()
+        }
+        if(TextUtils.isEmpty(preferences.upTime())) {
+            api_uptime.text = getString(R.string.pref_uptime)
+        } else {
+            api_uptime.text = preferences.upTime()
+        }
         api_button.setOnClickListener {
             val address : String? = preferences.address()
             dialog = DialogUtils.dialogEditText(this@SettingsActivity, getString(R.string.pref_address), address!!,
@@ -58,20 +68,6 @@ class SettingsActivity : BaseActivity() {
                             if(!TextUtils.isEmpty(value)) {
                                 preferences.address(value!!)
                                 api_text.text = preferences.address()
-                            }
-                        }
-                        override fun onCancel() {
-                            dialog?.dismiss()
-                        }
-                    })
-        }
-        password_button.setOnClickListener {
-            val password : String? = preferences.password()
-            dialog = DialogUtils.dialogPasswordText(this@SettingsActivity, getString(R.string.pref_password), password!!,
-                    object : DialogTextView.ViewListener {
-                        override fun onTextChange(value: String?) {
-                            if(!TextUtils.isEmpty(value)) {
-                                preferences.password(value!!)
                             }
                         }
                         override fun onCancel() {

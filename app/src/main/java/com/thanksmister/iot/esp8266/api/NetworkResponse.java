@@ -29,31 +29,31 @@ import static com.thanksmister.iot.esp8266.api.Status.SUCCESS;
  * Response holder provided to the UI
  * https://proandroiddev.com/mvvm-architecture-using-livedata-rxjava-and-new-dagger-android-injection-639837b1eb6c
  */
-public class NetworkResponse {
+public class NetworkResponse<T> {
 
     public  Status status;
 
     @Nullable
-    public final String data;
+    public final T data;
 
     @Nullable
     public final Throwable error;
 
-    private NetworkResponse(Status status, @Nullable String data, @Nullable Throwable error) {
+    private NetworkResponse(Status status, @Nullable T data, @Nullable Throwable error) {
         this.status = status;
         this.data = data;
         this.error = error;
     }
 
-    public static NetworkResponse loading() {
-        return new NetworkResponse(LOADING, null, null);
+    public static <T> NetworkResponse<T> loading() {
+        return new NetworkResponse<T>(LOADING, null, null);
     }
 
-    public static NetworkResponse success(@NonNull String data) {
-        return new NetworkResponse(SUCCESS, data, null);
+    public static <T> NetworkResponse<T> success(@NonNull T data) {
+        return new NetworkResponse<T>(SUCCESS, data, null);
     }
 
-    public static NetworkResponse error(@NonNull Throwable error) {
-        return new NetworkResponse(ERROR, null, error);
+    public static <T> NetworkResponse<T> error(@NonNull Throwable error) {
+        return new NetworkResponse<T>(ERROR, null, error);
     }
 }

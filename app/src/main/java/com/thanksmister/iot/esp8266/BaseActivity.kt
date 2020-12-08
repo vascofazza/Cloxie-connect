@@ -16,22 +16,11 @@
 
 package com.thanksmister.iot.esp8266
 
-import android.Manifest
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.content.pm.PackageManager
-import android.net.ConnectivityManager
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.support.annotation.NonNull
-import android.support.v4.app.ActivityCompat
 import android.view.Menu
 import android.view.MenuItem
 import com.thanksmister.iot.esp8266.persistence.Preferences
-import com.thanksmister.iot.esp8266.ui.ConnectionLiveData
 import dagger.android.support.DaggerAppCompatActivity
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber

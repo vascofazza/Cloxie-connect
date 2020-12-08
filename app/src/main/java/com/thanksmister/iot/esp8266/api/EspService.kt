@@ -18,17 +18,29 @@
 package com.thanksmister.iot.esp8266.api
 
 
-import android.arch.lifecycle.LiveData
-import com.thanksmister.iot.esp8266.vo.Message
 import io.reactivex.Observable
 
-import retrofit2.Call
 import retrofit2.http.*
 
 interface EspService {
-    @GET("message/{message}")
-    fun sendMessage(@Path("message") message:String): LiveData<ApiResponse<Message>>
+    @POST("/{path}")
+    @FormUrlEncoded
+    fun sendConfiguration(
+        @Path("path") path: String,
+        @Field("timezone_field") timezone: String,
+        @Field("h24_field") h24: String,
+        @Field("blink_field") blink_field: String,
+        @Field("temp_field") temp_field: String,
+        @Field("adaptive_field") adaptive_field: String,
+        @Field("leds_field") leds_field: String,
+        @Field("leds_mode_field") leds_mode_field: String,
+        @Field("brightness_offset") brightness_offset: String,
+        @Field("shutdown_threshold") shutdown_threshold: String,
+        @Field("sleep_hour") sleep_hour: String,
+        @Field("wake_hour") wake_hour: String,
+        @Field("shutdown_delay") shutdown_delay: String
+    ): Observable<String>// LiveData<ApiResponse<Message>>
 
-    @GET("led/{state}")
-    fun sendState(@Path("state") state:String): Observable<MessageResponse>
+    @GET("/{path}")
+    fun getParameters(@Path("path") state: String): Observable<ParameterResponse>
 }
