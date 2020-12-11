@@ -52,51 +52,51 @@ class TransmitFragment : BaseFragment() {
 
     private var displayModeMap: HashMap<String, String> = hashMapOf("24H" to "1", "12H" to "0")
     private var timezoneMap: HashMap<String, String> = linkedMapOf(
-        "GMT" to "163",
-        "GMT+1" to "164",
-        "GMT+2" to "168",
-        "GMT+3" to "169",
-        "GMT+4" to "170",
-        "GMT+5" to "171",
-        "GMT+6" to "172",
-        "GMT+7" to "173",
-        "GMT+8" to "174",
-        "GMT+9" to "175",
-        "GMT+10" to "165",
-        "GMT+11" to "166",
-        "GMT+12" to "167",
-        "GMT-1" to "176",
-        "GMT-2" to "182",
-        "GMT-3" to "183",
-        "GMT-4" to "184",
-        "GMT-5" to "185",
-        "GMT-6" to "186",
-        "GMT-7" to "187",
-        "GMT-8" to "188",
-        "GMT-9" to "189",
-        "GMT-10" to "177",
-        "GMT-11" to "178",
-        "GMT-12" to "179",
-        "GMT-13" to "180",
-        "GMT-14" to "181",
-        "UTC" to "190"
+            "GMT" to "163",
+            "GMT+1" to "164",
+            "GMT+2" to "168",
+            "GMT+3" to "169",
+            "GMT+4" to "170",
+            "GMT+5" to "171",
+            "GMT+6" to "172",
+            "GMT+7" to "173",
+            "GMT+8" to "174",
+            "GMT+9" to "175",
+            "GMT+10" to "165",
+            "GMT+11" to "166",
+            "GMT+12" to "167",
+            "GMT-1" to "176",
+            "GMT-2" to "182",
+            "GMT-3" to "183",
+            "GMT-4" to "184",
+            "GMT-5" to "185",
+            "GMT-6" to "186",
+            "GMT-7" to "187",
+            "GMT-8" to "188",
+            "GMT-9" to "189",
+            "GMT-10" to "177",
+            "GMT-11" to "178",
+            "GMT-12" to "179",
+            "GMT-13" to "180",
+            "GMT-14" to "181",
+            "UTC" to "190"
     )
     private var blinkModeMap: HashMap<String, String> =
-        linkedMapOf("off" to "0", "static" to "1", "double static" to "2", "fade out" to "3")
+            linkedMapOf("off" to "0", "static" to "1", "double static" to "2", "fade out" to "3")
     private var temperatureScaleMap: HashMap<String, String> = linkedMapOf("C°" to "1", "F°" to "0")
-    private var adaptiveBrightnessMap: HashMap<String, String> =
-        linkedMapOf("off" to "0", "on" to "1")
+    private var onOffMap: HashMap<String, String> =
+            linkedMapOf("off" to "0", "on" to "1")
     private var ledsMap: HashMap<String, String> = linkedMapOf("off" to "0", "on" to "1")
     private var ledsModeMap: HashMap<String, String> =
-        linkedMapOf("static" to "0", "rotating" to "1", "random" to "2")
+            linkedMapOf("static" to "0", "rotating" to "1", "random" to "2")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_transmit, container, false)
@@ -121,57 +121,73 @@ class TransmitFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         var dataAdapter = ArrayAdapter<String>(
-            this.context!!,
-            android.R.layout.simple_spinner_item,
-            timezoneMap.keys.toTypedArray()
+                this.context!!,
+                android.R.layout.simple_spinner_item,
+                timezoneMap.keys.toTypedArray()
         )
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         timezone.setAdapter(dataAdapter)
 
         dataAdapter = ArrayAdapter<String>(
-            this.context!!,
-            android.R.layout.simple_spinner_item,
-            displayModeMap.keys.toTypedArray()
+                this.context!!,
+                android.R.layout.simple_spinner_item,
+                displayModeMap.keys.toTypedArray()
         )
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         display_mode.setAdapter(dataAdapter)
 
         dataAdapter = ArrayAdapter<String>(
-            this.context!!,
-            android.R.layout.simple_spinner_item,
-            blinkModeMap.keys.toTypedArray()
+                this.context!!,
+                android.R.layout.simple_spinner_item,
+                blinkModeMap.keys.toTypedArray()
         )
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         blink_mode.setAdapter(dataAdapter)
 
         dataAdapter = ArrayAdapter<String>(
-            this.context!!,
-            android.R.layout.simple_spinner_item,
-            temperatureScaleMap.keys.toTypedArray()
+                this.context!!,
+                android.R.layout.simple_spinner_item,
+                temperatureScaleMap.keys.toTypedArray()
         )
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         temp_scale.setAdapter(dataAdapter)
 
         dataAdapter = ArrayAdapter<String>(
-            this.context!!,
-            android.R.layout.simple_spinner_item,
-            adaptiveBrightnessMap.keys.toTypedArray()
+                this.context!!,
+                android.R.layout.simple_spinner_item,
+                onOffMap.keys.toTypedArray()
         )
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         adaptive_brightness.setAdapter(dataAdapter)
 
         dataAdapter = ArrayAdapter<String>(
-            this.context!!,
-            android.R.layout.simple_spinner_item,
-            ledsMap.keys.toTypedArray()
+                this.context!!,
+                android.R.layout.simple_spinner_item,
+                onOffMap.keys.toTypedArray()
+        )
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        termometer.setAdapter(dataAdapter)
+
+        dataAdapter = ArrayAdapter<String>(
+                this.context!!,
+                android.R.layout.simple_spinner_item,
+                onOffMap.keys.toTypedArray()
+        )
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        date.setAdapter(dataAdapter)
+
+        dataAdapter = ArrayAdapter<String>(
+                this.context!!,
+                android.R.layout.simple_spinner_item,
+                ledsMap.keys.toTypedArray()
         )
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         leds.setAdapter(dataAdapter)
 
         dataAdapter = ArrayAdapter<String>(
-            this.context!!,
-            android.R.layout.simple_spinner_item,
-            ledsModeMap.keys.toTypedArray()
+                this.context!!,
+                android.R.layout.simple_spinner_item,
+                ledsModeMap.keys.toTypedArray()
         )
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         leds_mode.setAdapter(dataAdapter)
@@ -184,51 +200,53 @@ class TransmitFragment : BaseFragment() {
 
         buttonSend.setOnClickListener {
             if (TextUtils.isEmpty(brightness_offset.text) || (!TextUtils.isDigitsOnly(
-                    brightness_offset.text
-                ) && (brightness_offset.text[0] == '-' && !TextUtils.isDigitsOnly(
-                    brightness_offset.text.substring(1)
-                )))
+                            brightness_offset.text
+                    ) && (brightness_offset.text[0] == '-' && !TextUtils.isDigitsOnly(
+                            brightness_offset.text.substring(1)
+                    )))
             ) {
                 Toast.makeText(activity!!, getString(R.string.toast_blak_value), Toast.LENGTH_SHORT)
-                    .show()
+                        .show()
             } else if (TextUtils.isEmpty(shutdown_threshold.text) || !TextUtils.isDigitsOnly(
-                    shutdown_threshold.text
-                )
+                            shutdown_threshold.text
+                    )
             ) {
                 Toast.makeText(activity!!, getString(R.string.toast_blak_value), Toast.LENGTH_SHORT)
-                    .show()
+                        .show()
             } else if (TextUtils.isEmpty(sleep_hour.text) || !TextUtils.isDigitsOnly(
-                    sleep_hour.text
-                )
+                            sleep_hour.text
+                    )
             ) {
                 Toast.makeText(activity!!, getString(R.string.toast_blak_value), Toast.LENGTH_SHORT)
-                    .show()
+                        .show()
             } else if (TextUtils.isEmpty(wake_hour.text) || !TextUtils.isDigitsOnly(
-                    wake_hour.text
-                )
+                            wake_hour.text
+                    )
             ) {
                 Toast.makeText(activity!!, getString(R.string.toast_blak_value), Toast.LENGTH_SHORT)
-                    .show()
+                        .show()
             } else if (TextUtils.isEmpty(shutdown_delay.text) || !TextUtils.isDigitsOnly(
-                    shutdown_delay.text
-                )
+                            shutdown_delay.text
+                    )
             ) {
                 Toast.makeText(activity!!, getString(R.string.toast_blak_value), Toast.LENGTH_SHORT)
-                    .show()
+                        .show()
             } else if (networkStatus != Status.LOADING) {
                 viewModel.sendParameters(
-                    h24 = displayModeMap.get(display_mode.selectedItem.toString())!!,
-                    timezone = timezoneMap.get(timezone.selectedItem.toString())!!,
-                    blink = blinkModeMap.get(blink_mode.selectedItem.toString())!!,
-                    temp = temperatureScaleMap.get(temp_scale.selectedItem.toString())!!,
-                    adaptive = adaptiveBrightnessMap.get(adaptive_brightness.selectedItem.toString())!!,
-                    leds = ledsMap.get(leds.selectedItem.toString())!!,
-                    leds_mode = ledsModeMap.get(leds_mode.selectedItem.toString())!!,
-                    brightness_offset = brightness_offset.text.toString(),
-                    shutdown_th = shutdown_threshold.text.toString(),
-                    sleep_hour = sleep_hour.text.toString(),
-                    wake_hour = wake_hour.text.toString(),
-                    shutdown_delay = shutdown_delay.text.toString()
+                        h24 = displayModeMap.get(display_mode.selectedItem.toString())!!,
+                        timezone = timezoneMap.get(timezone.selectedItem.toString())!!,
+                        blink = blinkModeMap.get(blink_mode.selectedItem.toString())!!,
+                        temp = temperatureScaleMap.get(temp_scale.selectedItem.toString())!!,
+                        adaptive = onOffMap.get(adaptive_brightness.selectedItem.toString())!!,
+                        leds = ledsMap.get(leds.selectedItem.toString())!!,
+                        leds_mode = ledsModeMap.get(leds_mode.selectedItem.toString())!!,
+                        brightness_offset = brightness_offset.text.toString(),
+                        shutdown_th = shutdown_threshold.text.toString(),
+                        sleep_hour = sleep_hour.text.toString(),
+                        wake_hour = wake_hour.text.toString(),
+                        shutdown_delay = shutdown_delay.text.toString(),
+                        termometer = onOffMap.get(timezone.selectedItem.toString())!!,
+                        date = onOffMap.get(timezone.selectedItem.toString())!!,
                 )
             }
         }
@@ -246,16 +264,16 @@ class TransmitFragment : BaseFragment() {
 
     private fun observeViewModel(viewModel: TransmitViewModel) {
         viewModel.networkResponse()
-            .observe(this, Observer { response -> processNetworkResponse(response) })
+                .observe(this, Observer { response -> processNetworkResponse(response) })
         viewModel.getToastMessage().observe(
-            this,
-            Observer { message -> Toast.makeText(activity!!, message, Toast.LENGTH_LONG).show() })
+                this,
+                Observer { message -> Toast.makeText(activity!!, message, Toast.LENGTH_LONG).show() })
         viewModel.getAlertMessage().observe(this, Observer { message ->
             DialogUtils.dialogMessage(
-                activity!!,
-                getString(R.string.alert_title_error),
-                message!!,
-                DialogInterface.OnClickListener { _, _ -> SettingsActivity.start(activity!!) })
+                    activity!!,
+                    getString(R.string.alert_title_error),
+                    message!!,
+                    DialogInterface.OnClickListener { _, _ -> SettingsActivity.start(activity!!) })
         })
     }
 
@@ -278,25 +296,37 @@ class TransmitFragment : BaseFragment() {
                     timezone.setSelection(getIndex(timezoneMap, response.data?.timezone!!), true)
                     display_mode.setSelection(getIndex(displayModeMap, response.data?.h24!!), true)
                     blink_mode.setSelection(
-                        getIndex(blinkModeMap, response.data?.blink_mode!!),
-                        true
+                            getIndex(blinkModeMap, response.data?.blink_mode!!),
+                            true
                     )
                     temp_scale.setSelection(
-                        getIndex(temperatureScaleMap, response.data?.temp!!),
-                        true
+                            getIndex(temperatureScaleMap, response.data?.temp!!),
+                            true
                     )
                     adaptive_brightness.setSelection(
-                        getIndex(
-                            adaptiveBrightnessMap,
-                            response.data?.adaptive_brightness!!
-                        ), true
+                            getIndex(
+                                    onOffMap,
+                                    response.data?.adaptive_brightness!!
+                            ), true
+                    )
+                    termometer.setSelection(
+                            getIndex(
+                                    onOffMap,
+                                    response.data?.termometer!!
+                            ), true
+                    )
+                    date.setSelection(
+                            getIndex(
+                                    onOffMap,
+                                    response.data?.date!!
+                            ), true
                     )
                     leds.setSelection(getIndex(ledsMap, response.data?.leds!!), true)
                     leds_mode.setSelection(
-                        getIndex(
-                            ledsModeMap,
-                            response.data?.led_configuration!!
-                        ), true
+                            getIndex(
+                                    ledsModeMap,
+                                    response.data?.led_configuration!!
+                            ), true
                     )
                     brightness_offset.setText(response.data.brightness_offset)
                     shutdown_threshold.setText(response.data.shutdown_threshold)
@@ -309,9 +339,9 @@ class TransmitFragment : BaseFragment() {
                 Status.ERROR -> {
                     val message = response.error?.message.toString()
                     Snackbar.make(
-                        activity!!.findViewById(android.R.id.content),
-                        message,
-                        Snackbar.LENGTH_LONG
+                            activity!!.findViewById(android.R.id.content),
+                            message,
+                            Snackbar.LENGTH_LONG
                     ).show()
                 }
                 else -> {

@@ -38,8 +38,8 @@ import javax.inject.Inject
 
 class TransmitViewModel @Inject
 constructor(
-    application: Application, private val dataSource: MessageDao,
-    private val configuration: Preferences
+        application: Application, private val dataSource: MessageDao,
+        private val configuration: Preferences
 ) : AndroidViewModel(application) {
 
     private val toastText = ToastMessage()
@@ -84,30 +84,30 @@ constructor(
         if (!TextUtils.isEmpty(configuration.address())) {
             val api = EspApi(configuration.address()!!)
             disposable.add(api.getParameters()
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { networkResponse.value = NetworkResponse.loading() }
-                .subscribeWith(object : DisposableObserver<ParameterResponse>() {
-                    override fun onNext(response: ParameterResponse) {
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe { networkResponse.value = NetworkResponse.loading() }
+                    .subscribeWith(object : DisposableObserver<ParameterResponse>() {
+                        override fun onNext(response: ParameterResponse) {
 
-                        networkResponse.value = NetworkResponse.success(response)
-                    }
-
-                    override fun onComplete() {
-                        Timber.d("complete");
-                        //networkResponse.value = NetworkResponse.success(null)
-                    }
-
-                    override fun onError(error: Throwable) {
-                        networkResponse.value = NetworkResponse.error(error)
-                        var errorMessage: String? = "Server error"
-                        if (!TextUtils.isEmpty(error.message)) {
-                            errorMessage = error.message
+                            networkResponse.value = NetworkResponse.success(response)
                         }
-                        insertMessageResponse("error", errorMessage!!)
-                        Timber.e("error: " + error.message);
-                    }
-                })
+
+                        override fun onComplete() {
+                            Timber.d("complete");
+                            //networkResponse.value = NetworkResponse.success(null)
+                        }
+
+                        override fun onError(error: Throwable) {
+                            networkResponse.value = NetworkResponse.error(error)
+                            var errorMessage: String? = "Server error"
+                            if (!TextUtils.isEmpty(error.message)) {
+                                errorMessage = error.message
+                            }
+                            insertMessageResponse("error", errorMessage!!)
+                            Timber.e("error: " + error.message);
+                        }
+                    })
             )
         } else {
             showAlertMessage(getApplication<Application>().getString(R.string.error_empty_address))
@@ -115,58 +115,62 @@ constructor(
     }
 
     fun sendParameters(
-        timezone: String,
-        h24: String,
-        blink: String,
-        temp: String,
-        adaptive: String,
-        leds: String,
-        leds_mode: String,
-        brightness_offset: String,
-        shutdown_th: String,
-        sleep_hour: String,
-        wake_hour: String,
-        shutdown_delay: String
+            timezone: String,
+            h24: String,
+            blink: String,
+            temp: String,
+            adaptive: String,
+            leds: String,
+            leds_mode: String,
+            brightness_offset: String,
+            shutdown_th: String,
+            sleep_hour: String,
+            wake_hour: String,
+            shutdown_delay: String,
+            termometer: String,
+            date: String
     ) {
         if (!TextUtils.isEmpty(configuration.address())) {
             val api = EspApi(configuration.address()!!)
             disposable.add(api.sendParameters(
-                timezone,
-                h24,
-                blink,
-                temp,
-                adaptive,
-                leds,
-                leds_mode,
-                brightness_offset,
-                shutdown_th,
-                sleep_hour,
-                wake_hour,
-                shutdown_delay
+                    timezone,
+                    h24,
+                    blink,
+                    temp,
+                    adaptive,
+                    leds,
+                    leds_mode,
+                    brightness_offset,
+                    shutdown_th,
+                    sleep_hour,
+                    wake_hour,
+                    shutdown_delay,
+                    termometer,
+                    date
             )
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                //.doOnSubscribe { networkResponse.value = NetworkResponse.loading() }
-                .subscribeWith(object : DisposableObserver<String>() {
-                    override fun onNext(response: String) {
-                        //networkResponse.value = NetworkResponse.success(null)
-                    }
-
-                    override fun onComplete() {
-                        Timber.d("complete");
-                        //networkResponse.value = NetworkResponse.success("complete")
-                    }
-
-                    override fun onError(error: Throwable) {
-                        networkResponse.value = NetworkResponse.error(error)
-                        var errorMessage: String? = "Server error"
-                        if (!TextUtils.isEmpty(error.message)) {
-                            errorMessage = error.message
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    //.doOnSubscribe { networkResponse.value = NetworkResponse.loading() }
+                    .subscribeWith(object : DisposableObserver<String>() {
+                        override fun onNext(response: String) {
+                            //networkResponse.value = NetworkResponse.success(null)
                         }
-                        insertMessageResponse("error", errorMessage!!)
-                        Timber.e("error: " + error.message);
-                    }
-                })
+
+                        override fun onComplete() {
+                            Timber.d("complete");
+                            //networkResponse.value = NetworkResponse.success("complete")
+                        }
+
+                        override fun onError(error: Throwable) {
+                            networkResponse.value = NetworkResponse.error(error)
+                            var errorMessage: String? = "Server error"
+                            if (!TextUtils.isEmpty(error.message)) {
+                                errorMessage = error.message
+                            }
+                            insertMessageResponse("error", errorMessage!!)
+                            Timber.e("error: " + error.message);
+                        }
+                    })
             );
         } else {
             showAlertMessage(getApplication<Application>().getString(R.string.error_empty_address))
@@ -185,10 +189,10 @@ constructor(
             message.createdAt = createdAt
             dataSource.insertMessage(message)
         }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-            }, { error -> Timber.e("Database error" + error.message) }))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                }, { error -> Timber.e("Database error" + error.message) }))
     }
 
     public override fun onCleared() {

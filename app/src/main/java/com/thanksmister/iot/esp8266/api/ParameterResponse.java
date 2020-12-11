@@ -54,6 +54,14 @@ public class ParameterResponse {
     @Expose
     private String wake_hour = null;
 
+    @SerializedName("termometer")
+    @Expose
+    private String termometer = null;
+
+    @SerializedName("date")
+    @Expose
+    private String date = null;
+
     @SerializedName("uptime")
     @Expose
     private String upTime = null;
@@ -61,6 +69,22 @@ public class ParameterResponse {
     @SerializedName("fw_ver")
     @Expose
     private String firmwareVersion = null;
+
+    public String getTermometer() {
+        return termometer;
+    }
+
+    public void setTermometer(String termometer) {
+        this.termometer = termometer;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 
     public String getUpTime() {
         return upTime;

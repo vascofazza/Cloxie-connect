@@ -26,19 +26,21 @@ interface EspService {
     @POST("/{path}")
     @FormUrlEncoded
     fun sendConfiguration(
-        @Path("path") path: String,
-        @Field("timezone_field") timezone: String,
-        @Field("h24_field") h24: String,
-        @Field("blink_field") blink_field: String,
-        @Field("temp_field") temp_field: String,
-        @Field("adaptive_field") adaptive_field: String,
-        @Field("leds_field") leds_field: String,
-        @Field("leds_mode_field") leds_mode_field: String,
-        @Field("brightness_offset") brightness_offset: String,
-        @Field("shutdown_threshold") shutdown_threshold: String,
-        @Field("sleep_hour") sleep_hour: String,
-        @Field("wake_hour") wake_hour: String,
-        @Field("shutdown_delay") shutdown_delay: String
+            @Path("path") path: String,
+            @Field("timezone_field") timezone: String,
+            @Field("h24_field") h24: String,
+            @Field("blink_field") blink_field: String,
+            @Field("temp_field") temp_field: String,
+            @Field("adaptive_field") adaptive_field: String,
+            @Field("leds_field") leds_field: String,
+            @Field("leds_mode_field") leds_mode_field: String,
+            @Field("brightness_offset") brightness_offset: String,
+            @Field("shutdown_threshold") shutdown_threshold: String,
+            @Field("sleep_hour") sleep_hour: String,
+            @Field("wake_hour") wake_hour: String,
+            @Field("shutdown_delay") shutdown_delay: String,
+            @Field("termometer_field") termometer: String,
+            @Field("date_field") date: String
     ): Observable<String>// LiveData<ApiResponse<Message>>
 
     @GET("/{path}")
