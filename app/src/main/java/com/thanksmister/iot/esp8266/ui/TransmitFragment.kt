@@ -245,8 +245,8 @@ class TransmitFragment : BaseFragment() {
                         sleep_hour = sleep_hour.text.toString(),
                         wake_hour = wake_hour.text.toString(),
                         shutdown_delay = shutdown_delay.text.toString(),
-                        termometer = onOffMap.get(timezone.selectedItem.toString())!!,
-                        date = onOffMap.get(timezone.selectedItem.toString())!!,
+                        termometer = onOffMap.get(termometer.selectedItem.toString())!!,
+                        date = onOffMap.get(date.selectedItem.toString())!!,
                 )
             }
         }
