@@ -62,6 +62,10 @@ public class ParameterResponse {
     @Expose
     private String date = null;
 
+    @SerializedName("depoisoning_field")
+    @Expose
+    private String depoisoning = null;
+
     @SerializedName("uptime")
     @Expose
     private String upTime = null;
@@ -196,6 +200,14 @@ public class ParameterResponse {
 
     public void setWake_hour(String wake_hour) {
         this.wake_hour = wake_hour;
+    }
+
+    public String getDepoisoning() {
+        return depoisoning;
+    }
+
+    public void setDepoisoning(String depoisoning) {
+        this.depoisoning = depoisoning;
     }
 
 }

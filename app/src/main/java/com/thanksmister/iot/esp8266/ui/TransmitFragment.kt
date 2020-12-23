@@ -198,6 +198,22 @@ class TransmitFragment : BaseFragment() {
             }
         }
 
+        buttonStart.setOnClickListener {
+            if (TextUtils.isEmpty(timer_interval.text) ||
+                    !TextUtils.isDigitsOnly(timer_interval.text)
+            ) {
+                Toast.makeText(activity!!, getString(R.string.toast_blak_value), Toast.LENGTH_SHORT)
+                        .show()
+            } else {
+
+                viewModel.sendTimerStart(Integer.parseInt(timer_interval.text.toString()));
+            }
+        }
+
+        buttonStop.setOnClickListener {
+            viewModel.sendTimerStop();
+        }
+
         buttonSend.setOnClickListener {
             if (TextUtils.isEmpty(brightness_offset.text) || (!TextUtils.isDigitsOnly(
                             brightness_offset.text
@@ -247,6 +263,7 @@ class TransmitFragment : BaseFragment() {
                         shutdown_delay = shutdown_delay.text.toString(),
                         termometer = onOffMap.get(termometer.selectedItem.toString())!!,
                         date = onOffMap.get(date.selectedItem.toString())!!,
+                        depoisoning = depoisoning_interval.text.toString()
                 )
             }
         }
@@ -333,6 +350,7 @@ class TransmitFragment : BaseFragment() {
                     sleep_hour.setText(response.data.sleep_hour)
                     wake_hour.setText(response.data.wake_hour)
                     shutdown_delay.setText(response.data.shutdown_delay)
+                    depoisoning_interval.setText(response.data.depoisoning)
                     preferences.upTime(response.data.upTime)
                     preferences.fwVersion(response.data.firmwareVersion)
                 }

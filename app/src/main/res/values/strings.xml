@@ -27,6 +27,7 @@
     <string name="pref_address_value" translatable="false">http://192.168.1.XX</string>
     <string name="pref_server">Network configuration</string>
     <string name="pref_status">Device status</string>
+    <string name="pref_configuration">Device configuration</string>
     <string name="pref_address_description">Enter the name for the access point.</string>
     <string name="pref_fw_ver">Device current firmware version.</string>
     <string name="pref_uptime">Device uptime since last reboot.</string>
@@ -35,6 +36,9 @@
     <string name="toast_network_connected">Network connected…</string>
     <string name="button_send">Save</string>
     <string name="button_read">Read</string>
+    <string name="button_start">Start</string>
+    <string name="button_pause">Pause</string>
+    <string name="button_stop">Stop</string>
     <string name="activity_logs">Logs</string>
     <string name="activity_settings">Settings</string>
     <string name="alert_title_error">Error</string>

@@ -40,9 +40,20 @@ interface EspService {
             @Field("wake_hour") wake_hour: String,
             @Field("shutdown_delay") shutdown_delay: String,
             @Field("termometer_field") termometer: String,
-            @Field("date_field") date: String
+            @Field("date_field") date: String,
+            @Field("depoisoning_field") depoisoning: String
     ): Observable<String>// LiveData<ApiResponse<Message>>
 
     @GET("/{path}")
     fun getParameters(@Path("path") state: String): Observable<ParameterResponse>
+
+    @POST("/timer_start")
+    @FormUrlEncoded
+    fun sendTimerStart(@Field("interval") interval: Int): Observable<String>
+
+    @POST("/timer_pause")
+    fun sendTimerPause(): Observable<String>
+
+    @POST("/timer_stop")
+    fun sendTimerStop(): Observable<String>
 }
