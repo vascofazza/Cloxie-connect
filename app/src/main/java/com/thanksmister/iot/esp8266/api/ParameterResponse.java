@@ -66,6 +66,10 @@ public class ParameterResponse {
     @Expose
     private String depoisoning = null;
 
+    @SerializedName("clock_cycle")
+    @Expose
+    private String clock_cycle = null;
+
     @SerializedName("uptime")
     @Expose
     private String upTime = null;
@@ -73,6 +77,14 @@ public class ParameterResponse {
     @SerializedName("fw_ver")
     @Expose
     private String firmwareVersion = null;
+
+    public String getClock_cycle() {
+        return clock_cycle;
+    }
+
+    public void setClock_cycle(String clock_cycle) {
+        this.clock_cycle = clock_cycle;
+    }
 
     public String getTermometer() {
         return termometer;

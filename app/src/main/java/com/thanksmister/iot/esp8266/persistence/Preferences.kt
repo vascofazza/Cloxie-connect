@@ -34,7 +34,7 @@ constructor(private val preferences: AppPreferences) {
     }
 
     fun address(): String? {
-        return this.preferences.getString(PREF_SSID, "192.168.4.1")
+        return this.preferences.getString(PREF_SSID, "192.168.1.1")
     }
 
     fun address(value:String) {

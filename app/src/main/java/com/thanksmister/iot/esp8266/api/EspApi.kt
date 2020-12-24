@@ -57,6 +57,18 @@ class EspApi(private val address: String) {
         service = retrofit.create(EspService::class.java)
     }
 
+    fun sendStopWatchStart(): Observable<String> {
+        return service.sendStopWatchStart();
+    }
+
+    fun sendStopWatchPause(): Observable<String> {
+        return service.sendStopWatchPause();
+    }
+
+    fun sendStopWatchStop(): Observable<String> {
+        return service.sendStopWatchStop();
+    }
+
     fun sendTimerStart(interval: Int): Observable<String> {
         return service.sendTimerStart(interval);
     }
@@ -73,7 +85,7 @@ class EspApi(private val address: String) {
         return service.getParameters("param_json");
     }
 
-    fun sendParameters(timezone: String, h24: String, blink: String, temp: String, adaptive: String, leds: String, leds_mode: String, brightness_offset: String, shutdown_th: String, sleep_hour: String, wake_hour: String, shutdown_delay: String, termometer: String, date: String, depoisoning: String): Observable<String> {//LiveData<ApiResponse<Message>> {
-        return service.sendConfiguration("paramsave", timezone, h24, blink, temp, adaptive, leds, leds_mode, brightness_offset, shutdown_th, sleep_hour, wake_hour, shutdown_delay, termometer, date, depoisoning)
+    fun sendParameters(timezone: String, h24: String, blink: String, temp: String, adaptive: String, leds: String, leds_mode: String, brightness_offset: String, shutdown_th: String, sleep_hour: String, wake_hour: String, shutdown_delay: String, termometer: String, date: String, depoisoning: String, clock_cycle: String): Observable<String> {//LiveData<ApiResponse<Message>> {
+        return service.sendConfiguration("paramsave", timezone, h24, blink, temp, adaptive, leds, leds_mode, brightness_offset, shutdown_th, sleep_hour, wake_hour, shutdown_delay, termometer, date, depoisoning, clock_cycle)
     }
 }

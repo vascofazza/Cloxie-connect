@@ -180,6 +180,105 @@ constructor(
         }
     }
 
+    fun sendStopWatchStart() {
+        if (!TextUtils.isEmpty(configuration.address())) {
+            val api = EspApi(configuration.address()!!)
+            disposable.add(api.sendStopWatchStart()
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe { networkResponse.value = NetworkResponse.loading() }
+                    .subscribeWith(object : DisposableObserver<String>() {
+                        override fun onNext(response: String) {
+
+                        }
+
+                        override fun onComplete() {
+                            Timber.d("complete");
+                            //networkResponse.value = NetworkResponse.success(null)
+                        }
+
+                        override fun onError(error: Throwable) {
+                            networkResponse.value = NetworkResponse.error(error)
+                            var errorMessage: String? = "Server error"
+                            if (!TextUtils.isEmpty(error.message)) {
+                                errorMessage = error.message
+                            }
+                            insertMessageResponse("error", errorMessage!!)
+                            Timber.e("error: " + error.message);
+                        }
+                    })
+            )
+        } else {
+            showAlertMessage(getApplication<Application>().getString(R.string.error_empty_address))
+        }
+    }
+
+    fun sendStopWatchPause() {
+        if (!TextUtils.isEmpty(configuration.address())) {
+            val api = EspApi(configuration.address()!!)
+            disposable.add(api.sendStopWatchPause()
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe { networkResponse.value = NetworkResponse.loading() }
+                    .subscribeWith(object : DisposableObserver<String>() {
+                        override fun onNext(response: String) {
+
+                        }
+
+                        override fun onComplete() {
+                            Timber.d("complete");
+                            //networkResponse.value = NetworkResponse.success(null)
+                        }
+
+                        override fun onError(error: Throwable) {
+                            networkResponse.value = NetworkResponse.error(error)
+                            var errorMessage: String? = "Server error"
+                            if (!TextUtils.isEmpty(error.message)) {
+                                errorMessage = error.message
+                            }
+                            insertMessageResponse("error", errorMessage!!)
+                            Timber.e("error: " + error.message);
+                        }
+                    })
+            )
+        } else {
+            showAlertMessage(getApplication<Application>().getString(R.string.error_empty_address))
+        }
+    }
+
+    fun sendStopWatchStop() {
+        if (!TextUtils.isEmpty(configuration.address())) {
+            val api = EspApi(configuration.address()!!)
+            disposable.add(api.sendStopWatchStop()
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe { networkResponse.value = NetworkResponse.loading() }
+                    .subscribeWith(object : DisposableObserver<String>() {
+                        override fun onNext(response: String) {
+
+                        }
+
+                        override fun onComplete() {
+                            Timber.d("complete");
+                            //networkResponse.value = NetworkResponse.success(null)
+                        }
+
+                        override fun onError(error: Throwable) {
+                            networkResponse.value = NetworkResponse.error(error)
+                            var errorMessage: String? = "Server error"
+                            if (!TextUtils.isEmpty(error.message)) {
+                                errorMessage = error.message
+                            }
+                            insertMessageResponse("error", errorMessage!!)
+                            Timber.e("error: " + error.message);
+                        }
+                    })
+            )
+        } else {
+            showAlertMessage(getApplication<Application>().getString(R.string.error_empty_address))
+        }
+    }
+
     fun sendTimerStart(interval: Int) {
         if (!TextUtils.isEmpty(configuration.address())) {
             val api = EspApi(configuration.address()!!)
@@ -228,7 +327,8 @@ constructor(
             shutdown_delay: String,
             termometer: String,
             date: String,
-            depoisoning: String
+            depoisoning: String,
+            clock_cycle: String
     ) {
         if (!TextUtils.isEmpty(configuration.address())) {
             val api = EspApi(configuration.address()!!)
@@ -247,7 +347,8 @@ constructor(
                     shutdown_delay,
                     termometer,
                     date,
-                    depoisoning
+                    depoisoning,
+                    clock_cycle
             )
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())

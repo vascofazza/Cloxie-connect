@@ -494,7 +494,7 @@
                     android:layout_marginLeft="24dp"
                     android:layout_marginRight="24dp"
                     android:layout_weight="1"
-                    android:text="Shutdown delay"
+                    android:text="Shutdown delay (s)"
                     android:textAppearance="@style/Text" />
 
                 <EditText
@@ -527,7 +527,7 @@
                     android:layout_marginLeft="24dp"
                     android:layout_marginRight="24dp"
                     android:layout_weight="1"
-                    android:text="Depoisoning Interval"
+                    android:text="Depoisoning Interval (m)"
                     android:textAppearance="@style/Text" />
 
                 <EditText
@@ -538,7 +538,40 @@
                     android:layout_marginRight="24dp"
                     android:layout_weight="1"
                     android:gravity="center_horizontal"
-                    android:text="3600"
+                    android:text="60"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_weight="1"
+                    android:text="Clock cycle (m)"
+                    android:textAppearance="@style/Text" />
+
+                <EditText
+                    android:id="@+id/clock_cycle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:text="60"
                     android:textAlignment="center" />
             </LinearLayout>
 
@@ -600,13 +633,69 @@
 
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@android:color/darker_gray"/>
+            <TextView
+                style="@style/TextSmall.Green.Bold"
+                android:paddingLeft="16dp"
+                android:paddingStart="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="StopWatch"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent">
+
+                <Button
+                    android:id="@+id/buttonStopWatchStart"
+                    style="@style/ButtonBlue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_weight="1"
+                    android:text="@string/button_start" />
+
+                <Button
+                    android:id="@+id/buttonStopWatchPause"
+                    style="@style/ButtonGray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_weight="1"
+                    android:text="@string/button_pause" />
+
+                <Button
+                    android:id="@+id/buttonStopWatchStop"
+                    style="@style/ButtonRed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_weight="1"
+                    android:text="@string/button_stop" />
+
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="12dp"
         android:background="@android:color/darker_gray"/>
     <LinearLayout
         android:layout_width="match_parent"

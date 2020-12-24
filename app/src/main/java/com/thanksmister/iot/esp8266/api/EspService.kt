@@ -41,7 +41,8 @@ interface EspService {
             @Field("shutdown_delay") shutdown_delay: String,
             @Field("termometer_field") termometer: String,
             @Field("date_field") date: String,
-            @Field("depoisoning_field") depoisoning: String
+            @Field("depoisoning_field") depoisoning: String,
+            @Field("clock_cycle") clock_cycle: String
     ): Observable<String>// LiveData<ApiResponse<Message>>
 
     @GET("/{path}")
@@ -56,4 +57,13 @@ interface EspService {
 
     @POST("/timer_stop")
     fun sendTimerStop(): Observable<String>
+
+    @POST("/stopwatch_start")
+    fun sendStopWatchStart(): Observable<String>
+
+    @POST("/stopwatch_pause")
+    fun sendStopWatchPause(): Observable<String>
+
+    @POST("/stopwatch_stop")
+    fun sendStopWatchStop(): Observable<String>
 }

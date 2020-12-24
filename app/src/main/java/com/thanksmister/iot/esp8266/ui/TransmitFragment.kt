@@ -214,6 +214,18 @@ class TransmitFragment : BaseFragment() {
             viewModel.sendTimerStop();
         }
 
+        buttonStopWatchStart.setOnClickListener {
+            viewModel.sendStopWatchStart();
+        }
+
+        buttonStopWatchPause.setOnClickListener {
+            viewModel.sendStopWatchPause();
+        }
+
+        buttonStopWatchStop.setOnClickListener {
+            viewModel.sendStopWatchStop();
+        }
+
         buttonSend.setOnClickListener {
             if (TextUtils.isEmpty(brightness_offset.text) || (!TextUtils.isDigitsOnly(
                             brightness_offset.text
@@ -247,6 +259,18 @@ class TransmitFragment : BaseFragment() {
             ) {
                 Toast.makeText(activity!!, getString(R.string.toast_blak_value), Toast.LENGTH_SHORT)
                         .show()
+            } else if (TextUtils.isEmpty(depoisoning_interval.text) || !TextUtils.isDigitsOnly(
+                            depoisoning_interval.text
+                    )
+            ) {
+                Toast.makeText(activity!!, getString(R.string.toast_blak_value), Toast.LENGTH_SHORT)
+                        .show()
+            } else if (TextUtils.isEmpty(clock_cycle.text) || !TextUtils.isDigitsOnly(
+                            clock_cycle.text
+                    )
+            ) {
+                Toast.makeText(activity!!, getString(R.string.toast_blak_value), Toast.LENGTH_SHORT)
+                        .show()
             } else if (networkStatus != Status.LOADING) {
                 viewModel.sendParameters(
                         h24 = displayModeMap.get(display_mode.selectedItem.toString())!!,
@@ -263,7 +287,8 @@ class TransmitFragment : BaseFragment() {
                         shutdown_delay = shutdown_delay.text.toString(),
                         termometer = onOffMap.get(termometer.selectedItem.toString())!!,
                         date = onOffMap.get(date.selectedItem.toString())!!,
-                        depoisoning = depoisoning_interval.text.toString()
+                        depoisoning = depoisoning_interval.text.toString(),
+                        clock_cycle = clock_cycle.text.toString(),
                 )
             }
         }
@@ -351,6 +376,7 @@ class TransmitFragment : BaseFragment() {
                     wake_hour.setText(response.data.wake_hour)
                     shutdown_delay.setText(response.data.shutdown_delay)
                     depoisoning_interval.setText(response.data.depoisoning)
+                    clock_cycle.setText(response.data.clock_cycle)
                     preferences.upTime(response.data.upTime)
                     preferences.fwVersion(response.data.firmwareVersion)
                 }
