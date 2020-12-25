@@ -7,7 +7,7 @@ on:
 
 jobs:
 
-  build:
+  release:
 
     runs-on: ubuntu-18.04
 
@@ -23,13 +23,12 @@ jobs:
 
     - name: Build debug apk
       run: ./gradlew clean assembleDebug
-
+    
     - name: Create release and upload apk
-      uses: underwindfall/create-release-with-debugapk@v2.0.0
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: svenstaro/upload-release-action@v1-release
       with:
-        tag_name: github.GITHUB_REF
-        asset_path: app/build/outputs/apk/dev/debug/app-dev-debug.apk
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: app/build/outputs/apk/dev/debug/app-dev-debug.apk
         asset_name: cloxie-connect.apk
-        asset_content_type: application/zip
+        tag: ${{ github.ref }}
+        overwrite: true
