@@ -16,10 +16,8 @@
 
 package com.thanksmister.iot.esp8266.ui
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.annotation.LayoutRes
-import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
@@ -28,15 +26,13 @@ import android.support.v4.view.ViewPager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import com.thanksmister.iot.esp8266.BaseActivity
 import com.thanksmister.iot.esp8266.R
 import com.thanksmister.iot.esp8266.manager.WiFiReceiverManager
-import com.thanksmister.iot.esp8266.manager.WiFiResponse
 import com.thanksmister.iot.esp8266.manager.WiFiStatus
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
-
+import javax.jmdns.JmDNS
 
 class MainActivity : BaseActivity(), TransmitFragment.OnFragmentInteractionListener,
         MainFragment.OnFragmentInteractionListener, ViewPager.OnPageChangeListener {
@@ -51,6 +47,26 @@ class MainActivity : BaseActivity(), TransmitFragment.OnFragmentInteractionListe
         super.onCreate(savedInstanceState)
         setContentView(getLayoutId())
         setSupportActionBar(toolbar)
+
+        val thread = Thread {
+            try {
+                val bonjourServiceType = "_http._tcp.local."
+                val bonjourService = JmDNS.create()
+                val serviceInfos: Array<out javax.jmdns.ServiceInfo>? = bonjourService.list(bonjourServiceType)
+                if (serviceInfos != null) {
+                    for (info in serviceInfos) {
+                        if (info.getName().toString().equals("cloxie") && info.hostAddresses.size > 0)
+                            preferences.address(info.hostAddresses[0])
+                    }
+                }
+                bonjourService.close()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        thread.start()
+        thread.join(5000)
 
         pagerAdapter = MainSlidePagerAdapter(supportFragmentManager)
         view_pager.adapter = pagerAdapter
@@ -90,36 +106,6 @@ class MainActivity : BaseActivity(), TransmitFragment.OnFragmentInteractionListe
         } else {
             // Otherwise, select the previous step.
             view_pager.currentItem = view_pager.currentItem - 1
-        }
-    }
-
-    private fun processWifiResponse(response: WiFiResponse?) {
-        wifiStatus = response?.status
-        when (wifiStatus) {
-            WiFiStatus.CONNECTED -> {
-                if(connectionLiveData!!.hasNetworkConnection()) {
-                    wifiConnected()
-                } else {
-                    waitingForConnection = true;
-                }
-            }
-            WiFiStatus.CONNECTING -> {
-                progressbar.visibility = View.VISIBLE
-            }
-            WiFiStatus.DISCONNECTED -> {
-                if(connectionLiveData!!.hasNetworkConnection()) {
-                    wifiDisconnected()
-                } else {
-                    waitingForConnection = true;
-                }
-            }
-            WiFiStatus.DISCONNECTING -> {
-                progressbar.visibility = View.VISIBLE
-            }
-            WiFiStatus.ERROR -> {
-                val message = response!!.error?.message.toString()
-                Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show()
-            }
         }
     }
 

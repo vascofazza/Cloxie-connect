@@ -38,6 +38,7 @@ import com.thanksmister.iot.esp8266.util.DialogUtils
 import com.thanksmister.iot.esp8266.viewmodel.TransmitViewModel
 import kotlinx.android.synthetic.main.content_transmit.*
 import javax.inject.Inject
+import javax.jmdns.JmDNS
 
 
 class TransmitFragment : BaseFragment() {
@@ -377,7 +378,9 @@ class TransmitFragment : BaseFragment() {
                     shutdown_delay.setText(response.data.shutdown_delay)
                     depoisoning_interval.setText(response.data.depoisoning)
                     clock_cycle.setText(response.data.clock_cycle)
-                    preferences.upTime(response.data.upTime)
+                    val split = response.data.upTime.split(":")
+                    val uptime = String.format("%s days, %s hours, %s minutes, %s seconds", split[0], split[1], split[2], split[3])
+                    preferences.upTime(uptime)
                     preferences.fwVersion(response.data.firmwareVersion)
                 }
                 Status.ERROR -> {
