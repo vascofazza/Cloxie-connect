@@ -19,6 +19,8 @@ package com.thanksmister.iot.esp8266.api
 
 
 import io.reactivex.Observable
+import okhttp3.ResponseBody
+import retrofit2.Response
 
 import retrofit2.http.*
 
@@ -66,4 +68,7 @@ interface EspService {
 
     @POST("/stopwatch_stop")
     fun sendStopWatchStop(): Observable<String>
+
+    @GET("/timezones")
+    fun getTimezones(): Observable<Response<ResponseBody>>
 }

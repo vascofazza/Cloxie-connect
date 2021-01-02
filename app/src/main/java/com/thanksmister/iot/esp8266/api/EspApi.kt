@@ -21,8 +21,10 @@ import com.thanksmister.iot.esp8266.api.adapters.DataTypeAdapterFactory
 import io.reactivex.Observable
 
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -83,6 +85,10 @@ class EspApi(private val address: String) {
 
     fun getParameters(): Observable<ParameterResponse> {
         return service.getParameters("param_json");
+    }
+
+    fun getTimezones(): Observable<Response<ResponseBody>> {
+        return service.getTimezones();
     }
 
     fun sendParameters(timezone: String, h24: String, blink: String, temp: String, adaptive: String, leds: String, leds_mode: String, brightness_offset: String, shutdown_th: String, sleep_hour: String, wake_hour: String, shutdown_delay: String, termometer: String, date: String, depoisoning: String, clock_cycle: String): Observable<String> {//LiveData<ApiResponse<Message>> {

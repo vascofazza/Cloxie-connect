@@ -73,6 +73,15 @@ constructor(private val preferences: AppPreferences) {
         this.preferences.put(ACTIVITY_TIME, value)
     }
 
+    fun timezones(version:String):String? {
+        return this.preferences.getString(version, "NULL")
+    }
+
+    fun timezones(version:String, value:String)
+    {
+        this.preferences.put(version, value)
+    }
+
     /**
      * Reset the `SharedPreferences` and database
      */

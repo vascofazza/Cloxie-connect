@@ -26,6 +26,7 @@ import com.thanksmister.iot.esp8266.api.NetworkResponse
 import com.thanksmister.iot.esp8266.api.ParameterResponse
 import com.thanksmister.iot.esp8266.persistence.MessageDao
 import com.thanksmister.iot.esp8266.persistence.Preferences
+import com.thanksmister.iot.esp8266.ui.TransmitFragment
 import com.thanksmister.iot.esp8266.util.DateUtils
 import com.thanksmister.iot.esp8266.vo.Message
 import io.reactivex.Completable
@@ -33,6 +34,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
+import okhttp3.ResponseBody
+import org.reactivestreams.Subscriber
+import retrofit2.Response
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -46,9 +50,14 @@ constructor(
     private val snackbarText = SnackbarMessage()
     private val alertText = AlertMessage()
     private val networkResponse = MutableLiveData<NetworkResponse<ParameterResponse>>()
+    private val timezoneResponse = MutableLiveData<String>()
     private val disposable = CompositeDisposable()
 
     fun networkResponse(): MutableLiveData<NetworkResponse<ParameterResponse>> {
+        return networkResponse
+    }
+
+    fun timezoneResponse(): MutableLiveData<NetworkResponse<ParameterResponse>> {
         return networkResponse
     }
 
@@ -86,7 +95,7 @@ constructor(
             disposable.add(api.getParameters()
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe { networkResponse.value = NetworkResponse.loading() }
+                    //.doOnSubscribe { networkResponse.value = NetworkResponse.loading() }
                     .subscribeWith(object : DisposableObserver<ParameterResponse>() {
                         override fun onNext(response: ParameterResponse) {
 
@@ -114,16 +123,37 @@ constructor(
         }
     }
 
+    fun getTimezones() {
+        if (configuration.timezones(configuration.fwVersion()!!).equals("NULL")) {
+            if (!TextUtils.isEmpty(configuration.address())) {
+                val api = EspApi(configuration.address()!!)
+                disposable.add(api.getTimezones()
+                        .subscribeOn(Schedulers.computation())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        //.doOnSubscribe { networkResponse.value = NetworkResponse.loading() }
+                        .subscribe {
+                            if (it.body() != null)
+                                configuration.timezones(configuration.fwVersion()!!, it.body().charStream().readText())
+                            Timber.d("complete");
+                            timezoneResponse.value = "OK"
+                        }
+                )
+            } else {
+                showAlertMessage(getApplication<Application>().getString(R.string.error_empty_address))
+            }
+        }
+    }
+
     fun sendTimerStop() {
         if (!TextUtils.isEmpty(configuration.address())) {
             val api = EspApi(configuration.address()!!)
             disposable.add(api.sendTimerStop()
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe { networkResponse.value = NetworkResponse.loading() }
+                    //.doOnSubscribe { networkResponse.value = NetworkResponse.loading() }
                     .subscribeWith(object : DisposableObserver<String>() {
                         override fun onNext(response: String) {
-
+                            Timber.d(response);
                         }
 
                         override fun onComplete() {
@@ -153,7 +183,7 @@ constructor(
             disposable.add(api.sendTimerPause()
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe { networkResponse.value = NetworkResponse.loading() }
+                    //.doOnSubscribe { networkResponse.value = NetworkResponse.loading() }
                     .subscribeWith(object : DisposableObserver<String>() {
                         override fun onNext(response: String) {
 
@@ -186,7 +216,7 @@ constructor(
             disposable.add(api.sendStopWatchStart()
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe { networkResponse.value = NetworkResponse.loading() }
+                    //.doOnSubscribe { networkResponse.value = NetworkResponse.loading() }
                     .subscribeWith(object : DisposableObserver<String>() {
                         override fun onNext(response: String) {
 
@@ -219,7 +249,7 @@ constructor(
             disposable.add(api.sendStopWatchPause()
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe { networkResponse.value = NetworkResponse.loading() }
+                    //.doOnSubscribe { networkResponse.value = NetworkResponse.loading() }
                     .subscribeWith(object : DisposableObserver<String>() {
                         override fun onNext(response: String) {
 
@@ -252,7 +282,7 @@ constructor(
             disposable.add(api.sendStopWatchStop()
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe { networkResponse.value = NetworkResponse.loading() }
+                    //.doOnSubscribe { networkResponse.value = NetworkResponse.loading() }
                     .subscribeWith(object : DisposableObserver<String>() {
                         override fun onNext(response: String) {
 
@@ -285,7 +315,7 @@ constructor(
             disposable.add(api.sendTimerStart(interval)
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe { networkResponse.value = NetworkResponse.loading() }
+                    //.doOnSubscribe { networkResponse.value = NetworkResponse.loading() }
                     .subscribeWith(object : DisposableObserver<String>() {
                         override fun onNext(response: String) {
 

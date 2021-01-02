@@ -16,6 +16,7 @@
 
 package com.thanksmister.iot.esp8266.ui
 
+import android.app.Application
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
@@ -31,12 +32,18 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.thanksmister.iot.esp8266.BaseFragment
 import com.thanksmister.iot.esp8266.R
+import com.thanksmister.iot.esp8266.api.EspApi
 import com.thanksmister.iot.esp8266.api.NetworkResponse
 import com.thanksmister.iot.esp8266.api.ParameterResponse
 import com.thanksmister.iot.esp8266.api.Status
+import com.thanksmister.iot.esp8266.persistence.Preferences
 import com.thanksmister.iot.esp8266.util.DialogUtils
 import com.thanksmister.iot.esp8266.viewmodel.TransmitViewModel
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.observers.DisposableObserver
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.content_transmit.*
+import timber.log.Timber
 import javax.inject.Inject
 import javax.jmdns.JmDNS
 
@@ -52,36 +59,7 @@ class TransmitFragment : BaseFragment() {
     private var networkStatus: Status = Status.START
 
     private var displayModeMap: HashMap<String, String> = hashMapOf("24H" to "1", "12H" to "0")
-    private var timezoneMap: HashMap<String, String> = linkedMapOf(
-            "GMT" to "163",
-            "GMT+1" to "164",
-            "GMT+2" to "168",
-            "GMT+3" to "169",
-            "GMT+4" to "170",
-            "GMT+5" to "171",
-            "GMT+6" to "172",
-            "GMT+7" to "173",
-            "GMT+8" to "174",
-            "GMT+9" to "175",
-            "GMT+10" to "165",
-            "GMT+11" to "166",
-            "GMT+12" to "167",
-            "GMT-1" to "176",
-            "GMT-2" to "182",
-            "GMT-3" to "183",
-            "GMT-4" to "184",
-            "GMT-5" to "185",
-            "GMT-6" to "186",
-            "GMT-7" to "187",
-            "GMT-8" to "188",
-            "GMT-9" to "189",
-            "GMT-10" to "177",
-            "GMT-11" to "178",
-            "GMT-12" to "179",
-            "GMT-13" to "180",
-            "GMT-14" to "181",
-            "UTC" to "190"
-    )
+    private var timezoneMap: MutableList<String> = ArrayList()
     private var blinkModeMap: HashMap<String, String> =
             linkedMapOf("off" to "0", "static" to "1", "double static" to "2", "fade out" to "3")
     private var temperatureScaleMap: HashMap<String, String> = linkedMapOf("C°" to "1", "F°" to "0")
@@ -112,11 +90,30 @@ class TransmitFragment : BaseFragment() {
         }
     }
 
+    private fun readTimezoneArray() {
+        if (timezoneMap.size < 2) {
+            timezoneMap.clear()
+            for (value: String in preferences.timezones(preferences.fwVersion()!!)!!.split("\n")) {
+                timezoneMap.add(value)
+            }
+
+            val dataAdapter = ArrayAdapter<String>(
+                    this.context!!,
+                    android.R.layout.simple_spinner_item,
+                    timezoneMap
+            )
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            timezone.setAdapter(dataAdapter)
+            viewModel.readParameters()
+        }
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(TransmitViewModel::class.java)
         observeViewModel(viewModel)
-        viewModel.readParameters();
+        viewModel.readParameters()
+        viewModel.getTimezones()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -124,7 +121,7 @@ class TransmitFragment : BaseFragment() {
         var dataAdapter = ArrayAdapter<String>(
                 this.context!!,
                 android.R.layout.simple_spinner_item,
-                timezoneMap.keys.toTypedArray()
+                timezoneMap
         )
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         timezone.setAdapter(dataAdapter)
@@ -194,9 +191,8 @@ class TransmitFragment : BaseFragment() {
         leds_mode.setAdapter(dataAdapter)
 
         buttonRead.setOnClickListener {
-            if (networkStatus != Status.LOADING) {
-                viewModel.readParameters()
-            }
+            viewModel.readParameters()
+            viewModel.getTimezones()
         }
 
         buttonStart.setOnClickListener {
@@ -275,7 +271,7 @@ class TransmitFragment : BaseFragment() {
             } else if (networkStatus != Status.LOADING) {
                 viewModel.sendParameters(
                         h24 = displayModeMap.get(display_mode.selectedItem.toString())!!,
-                        timezone = timezoneMap.get(timezone.selectedItem.toString())!!,
+                        timezone = timezone.selectedItem.toString(),
                         blink = blinkModeMap.get(blink_mode.selectedItem.toString())!!,
                         temp = temperatureScaleMap.get(temp_scale.selectedItem.toString())!!,
                         adaptive = onOffMap.get(adaptive_brightness.selectedItem.toString())!!,
@@ -308,6 +304,9 @@ class TransmitFragment : BaseFragment() {
     private fun observeViewModel(viewModel: TransmitViewModel) {
         viewModel.networkResponse()
                 .observe(this, Observer { response -> processNetworkResponse(response) })
+        viewModel.timezoneResponse()
+                .observe(this, Observer { response -> readTimezoneArray() })
+
         viewModel.getToastMessage().observe(
                 this,
                 Observer { message -> Toast.makeText(activity!!, message, Toast.LENGTH_LONG).show() })
@@ -336,7 +335,7 @@ class TransmitFragment : BaseFragment() {
                     //
                 }
                 Status.SUCCESS -> {
-                    timezone.setSelection(getIndex(timezoneMap, response.data?.timezone!!), true)
+                    timezone.setSelection(timezoneMap.indexOf(response.data?.timezone!!), true)
                     display_mode.setSelection(getIndex(displayModeMap, response.data?.h24!!), true)
                     blink_mode.setSelection(
                             getIndex(blinkModeMap, response.data?.blink_mode!!),

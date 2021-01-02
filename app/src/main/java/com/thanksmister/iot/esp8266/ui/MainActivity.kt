@@ -66,7 +66,7 @@ class MainActivity : BaseActivity(), TransmitFragment.OnFragmentInteractionListe
         }
 
         thread.start()
-        thread.join(5000)
+        thread.join(1000)
 
         pagerAdapter = MainSlidePagerAdapter(supportFragmentManager)
         view_pager.adapter = pagerAdapter
