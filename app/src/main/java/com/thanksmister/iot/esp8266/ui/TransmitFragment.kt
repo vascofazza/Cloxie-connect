@@ -113,7 +113,6 @@ class TransmitFragment : BaseFragment() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(TransmitViewModel::class.java)
         observeViewModel(viewModel)
         viewModel.readParameters()
-        viewModel.getTimezones()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -192,7 +191,6 @@ class TransmitFragment : BaseFragment() {
 
         buttonRead.setOnClickListener {
             viewModel.readParameters()
-            viewModel.getTimezones()
         }
 
         buttonStart.setOnClickListener {
@@ -335,7 +333,10 @@ class TransmitFragment : BaseFragment() {
                     //
                 }
                 Status.SUCCESS -> {
-                    timezone.setSelection(timezoneMap.indexOf(response.data?.timezone!!), true)
+                    preferences.fwVersion(response.data!!.firmwareVersion)
+                    viewModel.getTimezones()
+                    if (timezoneMap.size > 1)
+                        timezone.setSelection(timezoneMap.indexOf(response.data?.timezone!!), true)
                     display_mode.setSelection(getIndex(displayModeMap, response.data?.h24!!), true)
                     blink_mode.setSelection(
                             getIndex(blinkModeMap, response.data?.blink_mode!!),
@@ -380,7 +381,6 @@ class TransmitFragment : BaseFragment() {
                     val split = response.data.upTime.split(":")
                     val uptime = String.format("%s days, %s hours, %s minutes, %s seconds", split[0], split[1], split[2], split[3])
                     preferences.upTime(uptime)
-                    preferences.fwVersion(response.data.firmwareVersion)
                 }
                 Status.ERROR -> {
                     val message = response.error?.message.toString()
