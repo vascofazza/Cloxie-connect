@@ -193,6 +193,10 @@ class TransmitFragment : BaseFragment() {
             viewModel.readParameters()
         }
 
+        buttonCalibrate.setOnClickListener {
+            viewModel.sendCalibrate()
+        }
+
         buttonStart.setOnClickListener {
             if (TextUtils.isEmpty(timer_interval.text) ||
                     !TextUtils.isDigitsOnly(timer_interval.text)

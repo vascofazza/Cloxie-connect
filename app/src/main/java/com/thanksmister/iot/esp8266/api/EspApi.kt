@@ -83,6 +83,10 @@ class EspApi(private val address: String) {
         return service.sendTimerStop();
     }
 
+    fun sendCalibrate(): Observable<String> {
+        return service.sendCalibrate();
+    }
+
     fun getParameters(): Observable<ParameterResponse> {
         return service.getParameters("param_json");
     }

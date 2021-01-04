@@ -60,6 +60,9 @@ interface EspService {
     @POST("/timer_stop")
     fun sendTimerStop(): Observable<String>
 
+    @GET("/calibrate")
+    fun sendCalibrate(): Observable<String>
+
     @POST("/stopwatch_start")
     fun sendStopWatchStart(): Observable<String>
 

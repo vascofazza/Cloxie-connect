@@ -177,6 +177,39 @@ constructor(
         }
     }
 
+    fun sendCalibrate() {
+        if (!TextUtils.isEmpty(configuration.address())) {
+            val api = EspApi(configuration.address()!!)
+            disposable.add(api.sendCalibrate()
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    //.doOnSubscribe { networkResponse.value = NetworkResponse.loading() }
+                    .subscribeWith(object : DisposableObserver<String>() {
+                        override fun onNext(response: String) {
+                            Timber.d(response);
+                        }
+
+                        override fun onComplete() {
+                            Timber.d("complete");
+                            //networkResponse.value = NetworkResponse.success(null)
+                        }
+
+                        override fun onError(error: Throwable) {
+                            networkResponse.value = NetworkResponse.error(error)
+                            var errorMessage: String? = "Server error"
+                            if (!TextUtils.isEmpty(error.message)) {
+                                errorMessage = error.message
+                            }
+                            insertMessageResponse("error", errorMessage!!)
+                            Timber.e("error: " + error.message);
+                        }
+                    })
+            )
+        } else {
+            showAlertMessage(getApplication<Application>().getString(R.string.error_empty_address))
+        }
+    }
+
     fun sendTimerPause() {
         if (!TextUtils.isEmpty(configuration.address())) {
             val api = EspApi(configuration.address()!!)
