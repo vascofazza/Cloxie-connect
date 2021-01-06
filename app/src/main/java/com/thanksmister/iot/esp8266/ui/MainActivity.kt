@@ -16,6 +16,8 @@
 
 package com.thanksmister.iot.esp8266.ui
 
+import android.content.Context
+import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v4.app.Fragment
@@ -23,6 +25,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -32,7 +35,10 @@ import com.thanksmister.iot.esp8266.manager.WiFiReceiverManager
 import com.thanksmister.iot.esp8266.manager.WiFiStatus
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
+import java.lang.String
+import java.net.InetAddress
 import javax.jmdns.JmDNS
+
 
 class MainActivity : BaseActivity(), TransmitFragment.OnFragmentInteractionListener,
         MainFragment.OnFragmentInteractionListener, ViewPager.OnPageChangeListener {
@@ -43,16 +49,42 @@ class MainActivity : BaseActivity(), TransmitFragment.OnFragmentInteractionListe
     private var waitingForConnection: Boolean = false;
     private var wifiStatus: WiFiStatus? = null;
 
+    private fun getDeviceIpAddress(wifi: WifiManager): InetAddress? {
+        var result: InetAddress? = null
+        try {
+            // default to Android localhost
+            result = InetAddress.getByName("10.0.0.2")
+
+            // figure out our wifi address, otherwise bail
+            val wifiinfo = wifi.connectionInfo
+            val intaddr = wifiinfo.ipAddress
+            val byteaddr = byteArrayOf((intaddr and 0xff).toByte(), (intaddr shr 8 and 0xff).toByte(),
+                    (intaddr shr 16 and 0xff).toByte(), (intaddr shr 24 and 0xff).toByte())
+            result = InetAddress.getByAddress(byteaddr)
+        } catch (ex: Exception) {
+            Log.w("D", String.format("getDeviceIpAddress Error: %s", ex.toString()))
+        }
+        return result
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(getLayoutId())
         setSupportActionBar(toolbar)
 
+        val wifi = getApplicationContext().getSystemService(Context.WIFI_SERVICE) as WifiManager
+        // get the device ip address
+        // get the device ip address
+        val deviceIpAddress: InetAddress = getDeviceIpAddress(wifi)!!
+        val multicastLock = wifi.createMulticastLock(javaClass.name)
+        multicastLock.setReferenceCounted(true)
+        multicastLock.acquire()
+
         val thread = Thread {
             try {
                 val bonjourServiceType = "_http._tcp.local."
-                val bonjourService = JmDNS.create()
-                val serviceInfos: Array<out javax.jmdns.ServiceInfo>? = bonjourService.list(bonjourServiceType)
+                val bonjourService = JmDNS.create(deviceIpAddress, "cloxie-connect")
+                val serviceInfos: Array<out javax.jmdns.ServiceInfo>? = bonjourService.list(bonjourServiceType, 5000)
                 if (serviceInfos != null) {
                     for (info in serviceInfos) {
                         if (info.getName().toString().equals("cloxie") && info.hostAddresses.size > 0)
@@ -64,9 +96,10 @@ class MainActivity : BaseActivity(), TransmitFragment.OnFragmentInteractionListe
                 e.printStackTrace()
             }
         }
-
         thread.start()
         thread.join(1000)
+
+        multicastLock.release()
 
         pagerAdapter = MainSlidePagerAdapter(supportFragmentManager)
         view_pager.adapter = pagerAdapter
