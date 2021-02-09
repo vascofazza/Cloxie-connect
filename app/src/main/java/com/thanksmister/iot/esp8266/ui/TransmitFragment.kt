@@ -197,6 +197,10 @@ class TransmitFragment : BaseFragment() {
             viewModel.sendCalibrate()
         }
 
+        buttonCycle.setOnClickListener {
+            viewModel.sendNextCycle();
+        }
+
         buttonStart.setOnClickListener {
             if (TextUtils.isEmpty(timer_interval.text) ||
                     !TextUtils.isDigitsOnly(timer_interval.text)
@@ -270,6 +274,42 @@ class TransmitFragment : BaseFragment() {
             ) {
                 Toast.makeText(activity!!, getString(R.string.toast_blak_value), Toast.LENGTH_SHORT)
                         .show()
+            }else if (TextUtils.isEmpty(transition_time.text) || !TextUtils.isDigitsOnly(
+                            transition_time.text
+                    )
+            ) {
+                Toast.makeText(activity!!, getString(R.string.toast_blak_value), Toast.LENGTH_SHORT)
+                        .show()
+            }else if (TextUtils.isEmpty(led_threshold.text) || !TextUtils.isDigitsOnly(
+                            led_threshold.text
+                    )
+            ) {
+                Toast.makeText(activity!!, getString(R.string.toast_blak_value), Toast.LENGTH_SHORT)
+                        .show()
+            }else if (TextUtils.isEmpty(min_led_brightness.text) || !TextUtils.isDigitsOnly(
+                            min_led_brightness.text
+                    )
+            ) {
+                Toast.makeText(activity!!, getString(R.string.toast_blak_value), Toast.LENGTH_SHORT)
+                        .show()
+            }else if (TextUtils.isEmpty(max_led_brightness.text) || !TextUtils.isDigitsOnly(
+                            max_led_brightness.text
+                    )
+            ) {
+                Toast.makeText(activity!!, getString(R.string.toast_blak_value), Toast.LENGTH_SHORT)
+                        .show()
+            }else if (TextUtils.isEmpty(min_tube_brightness.text) || !TextUtils.isDigitsOnly(
+                            min_tube_brightness.text
+                    )
+            ) {
+                Toast.makeText(activity!!, getString(R.string.toast_blak_value), Toast.LENGTH_SHORT)
+                        .show()
+            }else if (TextUtils.isEmpty(max_tube_brightness.text) || !TextUtils.isDigitsOnly(
+                            max_tube_brightness.text
+                    )
+            ) {
+                Toast.makeText(activity!!, getString(R.string.toast_blak_value), Toast.LENGTH_SHORT)
+                        .show()
             } else if (networkStatus != Status.LOADING) {
                 viewModel.sendParameters(
                         h24 = displayModeMap.get(display_mode.selectedItem.toString())!!,
@@ -288,6 +328,12 @@ class TransmitFragment : BaseFragment() {
                         date = onOffMap.get(date.selectedItem.toString())!!,
                         depoisoning = depoisoning_interval.text.toString(),
                         clock_cycle = clock_cycle.text.toString(),
+                        transition_time = transition_time.text.toString(),
+                        led_threshold = led_threshold.text.toString(),
+                        min_led_brightness = min_led_brightness.text.toString(),
+                        max_led_brightness = max_led_brightness.text.toString(),
+                        min_tube_brightness = min_tube_brightness.text.toString(),
+                        max_tube_brightness = max_tube_brightness.text.toString()
                 )
             }
         }
@@ -382,6 +428,12 @@ class TransmitFragment : BaseFragment() {
                     shutdown_delay.setText(response.data.shutdown_delay)
                     depoisoning_interval.setText(response.data.depoisoning)
                     clock_cycle.setText(response.data.clock_cycle)
+                    led_threshold.setText(response.data.ledThreshold)
+                    transition_time.setText(response.data.transitionTime)
+                    min_led_brightness.setText(response.data.min_led_brightness)
+                    max_led_brightness.setText(response.data.max_led_brightness)
+                    min_tube_brightness.setText(response.data.min_tube_brightness)
+                    max_tube_brightness.setText(response.data.max_tube_brightness)
                     val split = response.data.upTime.split(":")
                     val uptime = String.format("%s days, %s hours, %s minutes, %s seconds", split[0], split[1], split[2], split[3])
                     preferences.upTime(uptime)

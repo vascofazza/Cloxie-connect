@@ -95,7 +95,11 @@ class EspApi(private val address: String) {
         return service.getTimezones();
     }
 
-    fun sendParameters(timezone: String, h24: String, blink: String, temp: String, adaptive: String, leds: String, leds_mode: String, brightness_offset: String, shutdown_th: String, sleep_hour: String, wake_hour: String, shutdown_delay: String, termometer: String, date: String, depoisoning: String, clock_cycle: String): Observable<String> {//LiveData<ApiResponse<Message>> {
-        return service.sendConfiguration("paramsave", timezone, h24, blink, temp, adaptive, leds, leds_mode, brightness_offset, shutdown_th, sleep_hour, wake_hour, shutdown_delay, termometer, date, depoisoning, clock_cycle)
+    fun sendNextCycle(): Observable<String> {
+        return service.sendNextCycle();
+    }
+
+    fun sendParameters(timezone: String, h24: String, blink: String, temp: String, adaptive: String, leds: String, leds_mode: String, brightness_offset: String, shutdown_th: String, sleep_hour: String, wake_hour: String, shutdown_delay: String, termometer: String, date: String, depoisoning: String, clock_cycle: String, led_threshold: String, transition_time: String, min_led_brightness: String, max_led_brightness: String, min_tube_brightness: String, max_tube_brightness: String): Observable<String> {//LiveData<ApiResponse<Message>> {
+        return service.sendConfiguration("paramsave", timezone, h24, blink, temp, adaptive, leds, leds_mode, brightness_offset, shutdown_th, sleep_hour, wake_hour, shutdown_delay, termometer, date, depoisoning, clock_cycle, led_threshold, transition_time, min_led_brightness, max_led_brightness, min_tube_brightness, max_tube_brightness)
     }
 }

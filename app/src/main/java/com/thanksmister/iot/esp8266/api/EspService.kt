@@ -44,7 +44,13 @@ interface EspService {
             @Field("termometer_field") termometer: String,
             @Field("date_field") date: String,
             @Field("depoisoning_field") depoisoning: String,
-            @Field("clock_cycle") clock_cycle: String
+            @Field("clock_cycle") clock_cycle: String,
+            @Field("led_threshold") led_threshold: String,
+            @Field("transition_time") transition_time: String,
+            @Field("min_led_brightness") min_led_brightness: String,
+            @Field("max_led_brightness") max_led_brightness: String,
+            @Field("min_tube_brightness") min_tube_brightness: String,
+            @Field("max_tube_brightness") max_tube_brightness: String
     ): Observable<String>// LiveData<ApiResponse<Message>>
 
     @GET("/{path}")
@@ -62,6 +68,9 @@ interface EspService {
 
     @GET("/calibrate")
     fun sendCalibrate(): Observable<String>
+
+    @GET("/cycle")
+    fun sendNextCycle(): Observable<String>
 
     @POST("/stopwatch_start")
     fun sendStopWatchStart(): Observable<String>

@@ -177,6 +177,39 @@ constructor(
         }
     }
 
+    fun sendNextCycle() {
+        if (!TextUtils.isEmpty(configuration.address())) {
+            val api = EspApi(configuration.address()!!)
+            disposable.add(api.sendNextCycle()
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    //.doOnSubscribe { networkResponse.value = NetworkResponse.loading() }
+                    .subscribeWith(object : DisposableObserver<String>() {
+                        override fun onNext(response: String) {
+                            Timber.d(response);
+                        }
+
+                        override fun onComplete() {
+                            Timber.d("complete");
+                            //networkResponse.value = NetworkResponse.success(null)
+                        }
+
+                        override fun onError(error: Throwable) {
+                            networkResponse.value = NetworkResponse.error(error)
+                            var errorMessage: String? = "Server error"
+                            if (!TextUtils.isEmpty(error.message)) {
+                                errorMessage = error.message
+                            }
+                            insertMessageResponse("error", errorMessage!!)
+                            Timber.e("error: " + error.message);
+                        }
+                    })
+            )
+        } else {
+            showAlertMessage(getApplication<Application>().getString(R.string.error_empty_address))
+        }
+    }
+
     fun sendCalibrate() {
         if (!TextUtils.isEmpty(configuration.address())) {
             val api = EspApi(configuration.address()!!)
@@ -391,7 +424,13 @@ constructor(
             termometer: String,
             date: String,
             depoisoning: String,
-            clock_cycle: String
+            clock_cycle: String,
+            led_threshold: String,
+            transition_time: String,
+            min_led_brightness: String,
+            max_led_brightness: String,
+            min_tube_brightness: String,
+            max_tube_brightness: String
     ) {
         if (!TextUtils.isEmpty(configuration.address())) {
             val api = EspApi(configuration.address()!!)
@@ -411,7 +450,13 @@ constructor(
                     termometer,
                     date,
                     depoisoning,
-                    clock_cycle
+                    clock_cycle,
+                    led_threshold,
+                    transition_time,
+                    min_led_brightness,
+                    max_led_brightness,
+                    min_tube_brightness,
+                    max_tube_brightness
             )
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())

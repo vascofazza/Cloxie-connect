@@ -74,6 +74,30 @@ public class ParameterResponse {
     @Expose
     private String upTime = null;
 
+    @SerializedName("led_threshold")
+    @Expose
+    private String ledThreshold = null;
+
+    @SerializedName("transition_time")
+    @Expose
+    private String transitionTime = null;
+
+    @SerializedName("min_led_brightness")
+    @Expose
+    private String min_led_brightness = null;
+
+    @SerializedName("max_led_brightness")
+    @Expose
+    private String max_led_brightness = null;
+
+    @SerializedName("min_tube_brightness")
+    @Expose
+    private String min_tube_brightness = null;
+
+    @SerializedName("max_tube_brightness")
+    @Expose
+    private String max_tube_brightness = null;
+
     @SerializedName("fw_ver")
     @Expose
     private String firmwareVersion = null;
@@ -222,4 +246,51 @@ public class ParameterResponse {
         this.depoisoning = depoisoning;
     }
 
+    public String getLedThreshold() {
+        return ledThreshold;
+    }
+
+    public void setLedThreshold(String ledThreshold) {
+        this.ledThreshold = ledThreshold;
+    }
+
+    public String getTransitionTime() {
+        return transitionTime;
+    }
+
+    public void setTransitionTime(String transitionTime) {
+        this.transitionTime = transitionTime;
+    }
+
+    public String getMin_led_brightness() {
+        return min_led_brightness;
+    }
+
+    public void setMin_led_brightness(String min_led_brightness) {
+        this.min_led_brightness = min_led_brightness;
+    }
+
+    public String getMax_led_brightness() {
+        return max_led_brightness;
+    }
+
+    public void setMax_led_brightness(String max_led_brightness) {
+        this.max_led_brightness = max_led_brightness;
+    }
+
+    public String getMin_tube_brightness() {
+        return min_tube_brightness;
+    }
+
+    public void setMin_tube_brightness(String min_tube_brightness) {
+        this.min_tube_brightness = min_tube_brightness;
+    }
+
+    public String getMax_tube_brightness() {
+        return max_tube_brightness;
+    }
+
+    public void setMax_tube_brightness(String max_tube_brightness) {
+        this.max_tube_brightness = max_tube_brightness;
+    }
 }

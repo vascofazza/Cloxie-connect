@@ -36,6 +36,7 @@
     <string name="toast_network_connected">Network connected…</string>
     <string name="button_send">Save</string>
     <string name="button_read">Read</string>
+    <string name="button_cycle">Cycle</string>
     <string name="button_start">Start</string>
     <string name="button_pause">Pause</string>
     <string name="button_stop">Stop</string>
